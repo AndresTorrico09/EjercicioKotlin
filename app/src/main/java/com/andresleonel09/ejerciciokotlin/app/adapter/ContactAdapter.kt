@@ -10,23 +10,25 @@ import android.widget.TextView
 
 import com.andresleonel09.ejerciciokotlin.R
 import com.andresleonel09.ejerciciokotlin.app.model.Contact
-import com.bumptech.glide.Glide
+import com.squareup.picasso.Picasso
 
-class ContactAdapter(internal var mCtx: Context, internal var contactList: List<Contact>) : RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() {
+class ContactAdapter(private var mCtx: Context, internal var contactList: List<Contact>) : RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
-        val view = LayoutInflater.from(mCtx).inflate(R.layout.recyclerview_layout, parent, false)
+        val view = LayoutInflater.from(mCtx).inflate(R.layout.carview_contacto, parent, false)
         return ContactViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
         val contact = contactList[position]
 
-        Glide.with(mCtx)
-                .load(contact.photo)
-                .into(holder.imageView)
+        Picasso.get()
+                .load(contact.thumb)
+                .resize(100, 100)
+                .centerCrop()
+                .into(holder.imgThumb)
 
-        holder.textView.text = contact.first_name + " " + contact.last_name
+        holder.tvNombre.text = contact.first_name + " " + contact.last_name
     }
 
     override fun getItemCount(): Int {
@@ -34,14 +36,7 @@ class ContactAdapter(internal var mCtx: Context, internal var contactList: List<
     }
 
     inner class ContactViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        var imageView: ImageView
-        var textView: TextView
-
-        init {
-
-            imageView = itemView.findViewById(R.id.imageView)
-            textView = itemView.findViewById(R.id.textView)
-        }
+        var imgThumb: ImageView = itemView.findViewById(R.id.imgThumb)
+        var tvNombre: TextView = itemView.findViewById(R.id.tvNombre)
     }
 }

@@ -11,6 +11,7 @@ import com.andresleonel09.ejerciciokotlin.app.model.Contact
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 
 class ContactViewModel : ViewModel() {
@@ -43,6 +44,9 @@ class ContactViewModel : ViewModel() {
 
         call.enqueue(object : Callback<List<Contact>> {
             override fun onResponse(call: Call<List<Contact>>, response: Response<List<Contact>>) {
+                Collections.sort(response.body()) {
+                    object1, object2 -> object1.first_name!!.compareTo(object2.first_name!!) }
+
                 //finally we are setting the list to our MutableLiveData
                 contactList!!.value = response.body()
             }

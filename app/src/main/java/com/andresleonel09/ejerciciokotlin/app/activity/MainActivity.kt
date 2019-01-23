@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView
 import com.andresleonel09.ejerciciokotlin.app.adapter.ContactAdapter
 import com.andresleonel09.ejerciciokotlin.app.model.Contact
 import android.arch.lifecycle.ViewModelProviders
-import android.support.annotation.Nullable
 import com.andresleonel09.ejerciciokotlin.app.view_model.ContactViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -18,20 +17,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerview)
+        val recyclerView: RecyclerView = findViewById(R.id.rvContactos)
         var adapter: ContactAdapter?
-        var contactList: List<Contact>? = null
 
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val model = ViewModelProviders.of(this).get(ContactViewModel::class.java)
+        // Get the ViewModel.
+        val mModel = ViewModelProviders.of(this).get(ContactViewModel::class.java)
 
-        model.getContacts.observe(this, Observer<List<Contact>> {
-            fun onChanged(@Nullable contactList: List<Contact>) {
-                adapter = ContactAdapter(this@MainActivity, contactList)
-                recyclerView.adapter = adapter
-            }
-        })
+        // Create the observer which updates the UI.
+        val contactObserver = Observer<List<Contact>> {
+            // Update the UI, in this case, a adapter.
+            adapter = ContactAdapter(this@MainActivity, contactList = it!!)
+            recyclerView.adapter = adapter
+        }
+
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        mModel.getContacts.observe(this, contactObserver)
     }
 }
