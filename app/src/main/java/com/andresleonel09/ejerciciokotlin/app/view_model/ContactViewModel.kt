@@ -18,6 +18,7 @@ class ContactViewModel : ViewModel() {
 
     //this is the data that we will fetch asynchronously 
     var contactList: MutableLiveData<List<Contact>>? = null
+    var contact: MutableLiveData<Contact>? = null
 
     //we will call this method to get the data
     //if the list is null 
@@ -32,7 +33,15 @@ class ContactViewModel : ViewModel() {
             return contactList as MutableLiveData<List<Contact>>
         }
 
-    //This method is using Retrofit to get the JSON data from URL 
+    val getContactById: LiveData<Contact>
+        get() {
+            if (contact == null) {
+                contact = MutableLiveData()
+                loadContactById()
+            }
+            return contact as MutableLiveData<Contact>
+        }
+
     private fun loadContacts() {
         val retrofit = Retrofit.Builder()
                 .baseUrl(Api.BASE_URL)
@@ -53,6 +62,25 @@ class ContactViewModel : ViewModel() {
 
             override fun onFailure(call: Call<List<Contact>>, t: Throwable) {
                     var tt = t
+            }
+        })
+    }
+
+    private fun loadContactById() {
+        val retrofit = Retrofit.Builder()
+                .baseUrl(Api.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+        val api = retrofit.create(Api::class.java)
+        val call = api.contactById(100)
+
+        call.enqueue(object : Callback<Contact> {
+            override fun onResponse(call: Call<Contact>, response: Response<Contact>) {
+                contact!!.value = response.body()
+            }
+            override fun onFailure(call: Call<Contact>, t: Throwable) {
+                var tt = t
             }
         })
     }

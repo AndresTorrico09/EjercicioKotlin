@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">EjercicioKotlin</string>
+    <string name="app_name">EjercicioIguanaFixKotlin</string>
+    <string name="phone_home">Home: %1$s</string>
+    <string name="phone_cellphone">Cellphone: %1$s</string>
+    <string name="phone_office">Office: %1$s</string>
+    <string name="birth_date">Birth Date: %1$s</string>
+    <string name="address_home">Home Address: %1$s</string>
+    <string name="address_work">Work Address: %1$s</string>
 </resources>
