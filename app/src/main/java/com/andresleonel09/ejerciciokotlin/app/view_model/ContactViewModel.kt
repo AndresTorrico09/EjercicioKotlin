@@ -62,7 +62,6 @@ class ContactViewModel(mApplication: Application, mParam: String) : ViewModel() 
             }
 
             override fun onFailure(call: Call<List<Contact>>, t: Throwable) {
-                    var tt = t
             }
         })
     }
@@ -81,7 +80,6 @@ class ContactViewModel(mApplication: Application, mParam: String) : ViewModel() 
                 contact!!.value = response.body()
             }
             override fun onFailure(call: Call<Contact>, t: Throwable) {
-                var tt = t
             }
         })
     }

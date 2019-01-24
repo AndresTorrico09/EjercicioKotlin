@@ -15,21 +15,69 @@ import android.app.SearchManager
 import android.content.Context
 import android.view.Menu
 import com.andresleonel09.ejerciciokotlin.app.view_model.ContactViewModelFactory
+import android.view.View.OnAttachStateChangeListener
+import android.view.View
+
 
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
+
+    var adapter: ContactAdapter? = null
+    private lateinit var recyclerView: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val recyclerView: RecyclerView = this.findViewById(R.id.rvContactos)
-        var adapter: ContactAdapter?
-
+        recyclerView = this.findViewById(R.id.rvContactos)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Get the ViewModel.
-        //val mModel = ViewModelProviders.of(this).get(ContactViewModel::class.java)
+        getViewModel()
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.action_bar_menu, menu)
+
+        val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchItem = menu.findItem(R.id.search)
+        val searchView = searchItem.actionView as SearchView
+        searchView.setSearchableInfo(manager.getSearchableInfo(componentName))
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                adapter!!.filter.filter(query)
+                return false
+            }
+        })
+
+        searchView.setIconifiedByDefault(true)
+        //Reset ViewModel
+        searchView.setOnCloseListener {
+            searchView.setQuery("", false)
+            searchView.clearFocus()
+            getViewModel()
+            false
+        }
+        searchView.addOnAttachStateChangeListener(object : OnAttachStateChangeListener {
+            override fun onViewDetachedFromWindow(arg0: View) {
+                getViewModel()
+            }
+
+            override fun onViewAttachedToWindow(arg0: View) {
+                // search was opened
+            }
+        })
+
+        return true
+    }
+
+    //Get View Model and update UI
+    private fun getViewModel() {
         val myViewModel = ViewModelProviders.of(this,
                 ContactViewModelFactory(this.application, "")).get(ContactViewModel::class.java)
 
@@ -44,28 +92,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         myViewModel.getContacts.observe(this, contactObserver)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.action_bar_menu, menu)
-
-/*        val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchItem = menu.findItem(R.id.search)
-        val searchView = searchItem.actionView as SearchView
-        searchView.setSearchableInfo(manager.getSearchableInfo(componentName))
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                return false
-            }
-
-            override fun onQueryTextSubmit(query: String): Boolean {
-                // task HERE
-                return false
-            }
-        })
-*/
-        return true
-    }
 
     override fun onQueryTextChange(newText: String?): Boolean {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
