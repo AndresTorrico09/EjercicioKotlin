@@ -11,6 +11,7 @@ import com.andresleonel09.ejerciciokotlin.app.model.Contact
 import com.andresleonel09.ejerciciokotlin.app.view_model.ContactViewModel
 import com.squareup.picasso.Picasso
 
+
 class DetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,8 +24,8 @@ class DetailActivity : AppCompatActivity() {
         val tvPhoneCellphone: TextView = findViewById(R.id.tvPhoneCellphone)
         val tvPhoneOffice: TextView    = findViewById(R.id.tvPhoneOffice)
         val tvBirthDate: TextView      = findViewById(R.id.tvBirthDate)
-        val tvAdressHome: TextView     = findViewById(R.id.tvAdressHome)
-        val tvAdressWork: TextView     = findViewById(R.id.tvAdressWork)
+        val tvAddressHome: TextView    = findViewById(R.id.tvAdressHome)
+        val tvAddressWork: TextView    = findViewById(R.id.tvAdressWork)
 
         val idContact = intent.getStringExtra("idContact")
 
@@ -34,12 +35,14 @@ class DetailActivity : AppCompatActivity() {
         // Create the observer which updates the UI.
         val contactByIdObserver = Observer<Contact> { contact ->
             Picasso.get().load(contact!!.photo).resize(200, 200).centerCrop().into(imgFoto)
-            tvNombre.text         = contact.first_name
-            tvPhoneHome.text      = contact.phones!![0].number
-            tvPhoneCellphone.text = contact.phones!![1].number
-            tvPhoneOffice.text    = contact.phones!![2].number
-            tvBirthDate.text      = contact.birthDate
-            //tvAdressHome.text     = contact.addresses!![0].home
+
+            tvNombre.text = contact.first_name + " " + contact.last_name
+            tvPhoneHome.text = String.format(resources.getString(R.string.phone_home), if (contact.phones!![0].number == null) "-" else contact.phones!![0].number.toString())
+            tvPhoneCellphone.text = String.format(resources.getString(R.string.phone_cellphone), if (contact.phones!![1].number == null) "-" else contact.phones!![1].number.toString())
+            tvPhoneOffice.text = String.format(resources.getString(R.string.phone_office), if (contact.phones!![2].number == null) "-" else contact.phones!![2].number.toString())
+            tvBirthDate.text = String.format(resources.getString(R.string.birth_date), contact.birth_date)
+            tvAddressHome.text = String.format(resources.getString(R.string.address_home), if (contact.addresses!![0].home == null) "-" else contact.addresses!![0].home)
+            tvAddressWork.text = String.format(resources.getString(R.string.address_work), if (contact.addresses!![0].work == null) "-" else contact.addresses!![0].work)
         }
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.

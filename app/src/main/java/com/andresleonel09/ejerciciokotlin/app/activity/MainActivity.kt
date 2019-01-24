@@ -11,18 +11,16 @@ import com.andresleonel09.ejerciciokotlin.app.model.Contact
 import android.arch.lifecycle.ViewModelProviders
 import android.support.v7.widget.SearchView
 import com.andresleonel09.ejerciciokotlin.app.view_model.ContactViewModel
-import android.support.v4.view.MenuItemCompat.getActionView
-import android.content.Context.SEARCH_SERVICE
 import android.app.SearchManager
-
-
+import android.content.Context
+import android.view.Menu
 
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val recyclerView: RecyclerView = findViewById(R.id.rvContactos)
+        val recyclerView: RecyclerView = this.findViewById(R.id.rvContactos)
         var adapter: ContactAdapter?
 
         recyclerView.setHasFixedSize(true)
@@ -42,38 +40,28 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         mModel.getContacts.observe(this, contactObserver)
     }
 
-    /*fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.action_bar, menu)
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.action_bar_menu, menu)
 
-        *//*    MenuItem searchViewMenuItem = menu.findItem(R.id.search);
-        final SearchView searchView = (SearchView) searchViewMenuItem.getActionView();
-*//*
-        val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchView = menu.findItem(R.id.search).getActionView() as SearchView
+/*        val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchItem = menu.findItem(R.id.search)
+        val searchView = searchItem.actionView as SearchView
         searchView.setSearchableInfo(manager.getSearchableInfo(componentName))
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                mAdapter.getFilter().filter(query)
-                return true
-            }
 
             override fun onQueryTextChange(newText: String): Boolean {
                 return false
             }
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                // task HERE
+                return false
+            }
         })
-
-        //Reseteo la lista de contactos al cerrar el search
-        searchView.setOnCloseListener {
-            searchView.setQuery("", false)
-            searchView.clearFocus()
-            presenter.obtenerContactos()
-
-            false
-        }
-
+*/
         return true
-    }*/
+    }
 
     override fun onQueryTextChange(newText: String?): Boolean {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
