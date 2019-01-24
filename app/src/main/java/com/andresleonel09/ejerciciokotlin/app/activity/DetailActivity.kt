@@ -10,6 +10,7 @@ import android.widget.ImageView
 import com.andresleonel09.ejerciciokotlin.app.model.Contact
 import com.andresleonel09.ejerciciokotlin.app.view_model.ContactViewModel
 import com.squareup.picasso.Picasso
+import com.andresleonel09.ejerciciokotlin.app.view_model.ContactViewModelFactory
 
 
 class DetailActivity : AppCompatActivity() {
@@ -30,7 +31,8 @@ class DetailActivity : AppCompatActivity() {
         val idContact = intent.getStringExtra("idContact")
 
         // Get the ViewModel.
-        val mModel = ViewModelProviders.of(this).get(ContactViewModel::class.java)
+        val myViewModel = ViewModelProviders.of(this,
+                ContactViewModelFactory(this.application, idContact)).get(ContactViewModel::class.java)
 
         // Create the observer which updates the UI.
         val contactByIdObserver = Observer<Contact> { contact ->
@@ -46,6 +48,6 @@ class DetailActivity : AppCompatActivity() {
         }
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-        mModel.getContactById.observe(this, contactByIdObserver)
+        myViewModel.getContactById.observe(this, contactByIdObserver)
     }
 }

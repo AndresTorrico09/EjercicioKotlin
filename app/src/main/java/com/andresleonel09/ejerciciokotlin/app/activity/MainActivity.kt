@@ -14,6 +14,7 @@ import com.andresleonel09.ejerciciokotlin.app.view_model.ContactViewModel
 import android.app.SearchManager
 import android.content.Context
 import android.view.Menu
+import com.andresleonel09.ejerciciokotlin.app.view_model.ContactViewModelFactory
 
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +28,10 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         // Get the ViewModel.
-        val mModel = ViewModelProviders.of(this).get(ContactViewModel::class.java)
+        //val mModel = ViewModelProviders.of(this).get(ContactViewModel::class.java)
+
+        val myViewModel = ViewModelProviders.of(this,
+                ContactViewModelFactory(this.application, "")).get(ContactViewModel::class.java)
 
         // Create the observer which updates the UI.
         val contactObserver = Observer<List<Contact>> { list ->
@@ -37,7 +41,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         }
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-        mModel.getContacts.observe(this, contactObserver)
+        myViewModel.getContacts.observe(this, contactObserver)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

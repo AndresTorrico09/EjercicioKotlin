@@ -1,6 +1,6 @@
 package com.andresleonel09.ejerciciokotlin.app.view_model
 
-import com.andresleonel09.ejerciciokotlin.app.*
+import android.app.Application
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Retrofit
 import android.arch.lifecycle.MutableLiveData
@@ -14,11 +14,12 @@ import retrofit2.Response
 import java.util.*
 
 
-class ContactViewModel : ViewModel() {
+class ContactViewModel(mApplication: Application, mParam: String) : ViewModel() {
 
     //this is the data that we will fetch asynchronously 
     var contactList: MutableLiveData<List<Contact>>? = null
     var contact: MutableLiveData<Contact>? = null
+    private val id: Any = mParam
 
     //we will call this method to get the data
     //if the list is null 
@@ -37,7 +38,7 @@ class ContactViewModel : ViewModel() {
         get() {
             if (contact == null) {
                 contact = MutableLiveData()
-                loadContactById()
+                loadContactById(id as String)
             }
             return contact as MutableLiveData<Contact>
         }
@@ -66,14 +67,14 @@ class ContactViewModel : ViewModel() {
         })
     }
 
-    private fun loadContactById() {
+    private fun loadContactById(id: String) {
         val retrofit = Retrofit.Builder()
                 .baseUrl(Api.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
         val api = retrofit.create(Api::class.java)
-        val call = api.contactById(100)
+        val call = api.contactById(id)
 
         call.enqueue(object : Callback<Contact> {
             override fun onResponse(call: Call<Contact>, response: Response<Contact>) {

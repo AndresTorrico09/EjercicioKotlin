@@ -15,5 +15,5 @@ interface Api {
     val contacts: Call<List<Contact>>
 
     @GET("contacts/{id}")
-    fun contactById(@Path("id") id: Int?): Call<Contact>
+    fun contactById(@Path("id") id: String): Call<Contact>
 }

@@ -34,7 +34,7 @@ class ContactAdapter(private var mCtx: Context, internal var contactList: List<C
 
         holder.itemView.setOnClickListener {
             val intent = Intent(mCtx, DetailActivity::class.java)
-            intent.putExtra("idContact", contact.userId)
+            intent.putExtra("idContact", contact.user_id)
             mCtx.startActivity(intent)
         }
     }
