@@ -5,12 +5,11 @@ import android.arch.lifecycle.ViewModelProviders
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.andresleonel09.ejerciciokotlin.R
-import android.widget.TextView
-import android.widget.ImageView
 import com.andresleonel09.ejerciciokotlin.app.model.Contact
 import com.andresleonel09.ejerciciokotlin.app.view_model.ContactViewModel
 import com.squareup.picasso.Picasso
 import com.andresleonel09.ejerciciokotlin.app.view_model.ContactViewModelFactory
+import kotlinx.android.synthetic.main.activity_detail.*
 
 
 class DetailActivity : AppCompatActivity() {
@@ -18,15 +17,6 @@ class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
-
-        val imgFoto: ImageView         = findViewById(R.id.imgFoto)
-        val tvNombre: TextView         = findViewById(R.id.tvNombre)
-        val tvPhoneHome: TextView      = findViewById(R.id.tvPhoneHome)
-        val tvPhoneCellphone: TextView = findViewById(R.id.tvPhoneCellphone)
-        val tvPhoneOffice: TextView    = findViewById(R.id.tvPhoneOffice)
-        val tvBirthDate: TextView      = findViewById(R.id.tvBirthDate)
-        val tvAddressHome: TextView    = findViewById(R.id.tvAdressHome)
-        val tvAddressWork: TextView    = findViewById(R.id.tvAdressWork)
 
         val idContact = intent.getStringExtra("idContact")
 
@@ -43,8 +33,8 @@ class DetailActivity : AppCompatActivity() {
             tvPhoneCellphone.text = String.format(resources.getString(R.string.phone_cellphone), if (contact.phones!![1].number == null) "-" else contact.phones!![1].number.toString())
             tvPhoneOffice.text = String.format(resources.getString(R.string.phone_office), if (contact.phones!![2].number == null) "-" else contact.phones!![2].number.toString())
             tvBirthDate.text = String.format(resources.getString(R.string.birth_date), contact.birth_date)
-            tvAddressHome.text = String.format(resources.getString(R.string.address_home), if (contact.addresses!![0].home == null) "-" else contact.addresses!![0].home)
-            tvAddressWork.text = String.format(resources.getString(R.string.address_work), if (contact.addresses!![0].work == null) "-" else contact.addresses!![0].work)
+            tvAdressHome.text = String.format(resources.getString(R.string.address_home), if (contact.addresses!![0].home == null) "-" else contact.addresses!![0].home)
+            tvAdressWork.text = String.format(resources.getString(R.string.address_work), if (contact.addresses!![0].work == null) "-" else contact.addresses!![0].work)
         }
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
